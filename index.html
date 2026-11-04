@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<title>Tape Marangatu — Aventura dos 21 Caminhos</title>
+<link rel="stylesheet" href="css/style.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="game-canvas"></canvas>
+
+<div id="loading">
+  <div class="loading-box">
+    <div class="loading-logo">TAPE MARANGATU</div>
+    <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+    <div class="loading-msg" id="loading-msg">Preparando a floresta…</div>
+  </div>
+</div>
+
+<div id="menu">
+  <div id="menu-main" class="menu-panel">
+    <h1 class="logo">TAPE MARANGATU</h1>
+    <h2 class="logo-sub">AVENTURA DOS 21 CAMINHOS</h2>
+    <button id="btn-jogar" class="btn">JOGAR</button>
+    <button id="btn-continuar" class="btn btn-alt">CONTINUAR</button>
+    <button id="btn-mapa" class="btn btn-alt">MAPA DOS CAMINHOS</button>
+    <button id="btn-medalhas" class="btn btn-alt">MEDALHAS</button>
+    <button id="btn-config" class="btn btn-alt">CONFIGURAÇÕES</button>
+    <div id="menu-toast" class="toast"></div>
+  </div>
+  <div id="menu-personagens" class="menu-panel hidden">
+    <h2 class="logo-sub">ESCOLHA SEU PERSONAGEM</h2>
+    <div class="char-grid">
+      <button id="btn-konomi" class="char-btn"><span class="char-name">KONOMI</span><span class="char-desc">Jovem arqueiro</span></button>
+      <button id="btn-kunhatai" class="char-btn"><span class="char-name">KUNHATAĨ</span><span class="char-desc">Jovem arqueira</span></button>
+    </div>
+    <button id="btn-voltar-personagens" class="btn btn-alt" style="margin-top:16px">Voltar</button>
+  </div>
+</div>
+
+<div id="hud">
+  <div class="hud-top">
+    <div class="hud-bar"><span>VIDA</span><div class="bar"><div id="hud-vida-fill" class="fill fill-vida"></div></div></div>
+    <div class="hud-bar"><span>ENERGIA</span><div class="bar"><div id="hud-energia-fill" class="fill fill-energia"></div></div></div>
+    <div class="hud-stat">🏹 <span id="hud-flechas">10</span></div>
+    <div class="hud-stat">⭐ <span id="hud-pontos">0</span></div>
+    <button id="btn-menu" class="btn btn-small">Menu</button>
+  </div>
+  <div id="hud-objective" class="hud-objective"></div>
+</div>
+
+<div id="mobile">
+  <div id="mobile-joy" class="mobile-joy"><div id="mobile-joy-nub" class="mobile-joy-nub"></div></div>
+  <div class="mobile-btns">
+    <button id="mobile-jump" class="mobile-btn">▲</button>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

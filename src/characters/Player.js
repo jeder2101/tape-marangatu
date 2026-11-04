@@ -10,7 +10,7 @@ export class Player {
     this.audio = audio;
 
     this.object = buildCharacter(PALETTES[characterKey] || PALETTES.konomi);
-    this.object.position.set(0, world.terrain.heightAt(0, 0), 20);
+    this.object.position.set(0, world.terrain.heightAt(0, 20), 20);
     scene.add(this.object);
 
     this.velocity = new THREE.Vector3();
@@ -26,9 +26,12 @@ export class Player {
     this.energia = 100;
     this.flechas = 10;
     this.pontos = 0;
+    this.invulnTimer = 0;
   }
 
   update(dt, input) {
+    this.invulnTimer = Math.max(0, this.invulnTimer - dt);
+
     const move = input.getMoveVector();
     const running = input.isRunning();
     const speed = running ? this.speedRun : this.speedWalk;
@@ -94,5 +97,21 @@ export class Player {
         else this.object.position.z += Math.sign(dz || 1) * pz;
       }
     }
+  }
+
+  takeDamage(amount) {
+    if (this.invulnTimer > 0 || this.vida <= 0) return;
+    this.vida = Math.max(0, this.vida - amount);
+    this.invulnTimer = 1.2;
+    this.audio.beep(180, 0.12, 0.15);
+    if (this.vida <= 0) this.respawn();
+  }
+
+  respawn() {
+    this.vida = 100;
+    this.energia = 100;
+    this.flechas = 10;
+    this.object.position.set(0, this.world.terrain.heightAt(0, 20), 20);
+    this.velocity.set(0, 0, 0);
   }
 }

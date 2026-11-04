@@ -3,6 +3,8 @@ export class Input {
     this.keys = new Set();
     this.mouseDX = 0;
     this.mouseDY = 0;
+    this.mouseButtons = new Set();
+    this._clickQueued = false;
     this.cameraYaw = 0;
     this.joystick = { x: 0, z: 0 };
     this.pointers = new Map();
@@ -18,17 +20,22 @@ export class Input {
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
 
     const canvas = document.getElementById('game-canvas');
+
     canvas.addEventListener('mousedown', (e) => {
-      this.pointers.set('mouse' + e.button, true);
-      if (e.button === 0 && canvas.requestPointerLock) canvas.requestPointerLock();
+      this.mouseButtons.add(e.button);
+      if (e.button === 0) {
+        this._clickQueued = true;
+        if (canvas.requestPointerLock) canvas.requestPointerLock();
+      }
     });
-    window.addEventListener('mouseup', (e) => this.pointers.set('mouse' + e.button, false));
+    window.addEventListener('mouseup', (e) => this.mouseButtons.delete(e.button));
     window.addEventListener('mousemove', (e) => {
       if (document.pointerLockElement === canvas) {
         this.mouseDX += e.movementX;
         this.mouseDY += e.movementY;
       }
     });
+    window.addEventListener('contextmenu', (e) => e.preventDefault());
 
     canvas.addEventListener('touchstart', (e) => {
       for (const t of e.changedTouches) this.pointers.set(t.identifier, { x: t.clientX, y: t.clientY });
@@ -40,7 +47,8 @@ export class Input {
         if (p && typeof p === 'object') {
           this.mouseDX += (t.clientX - p.x) * 1.5;
           this.mouseDY += (t.clientY - p.y) * 1.5;
-          p.x = t.clientX; p.y = t.clientY;
+          p.x = t.clientX;
+          p.y = t.clientY;
         }
       }
       e.preventDefault();
@@ -76,5 +84,11 @@ export class Input {
 
   queueJump() {
     this._jumpQueued = true;
+  }
+
+  consumeClick() {
+    const v = this._clickQueued;
+    this._clickQueued = false;
+    return v;
   }
 }

@@ -1,68 +1,853 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-<title>Tape Marangatu — Aventura dos 21 Caminhos</title>
-<link rel="stylesheet" href="css/style.css" />
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-  }
-}
-</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tape Marangatu 3D — Os 21 Caminhos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@300;400;600;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+body{font-family:'Outfit',sans-serif;background-color:#7dd3fc;color:#f0fdf4;user-select:none;touch-action:manipulation;overflow:hidden}
+.font-game{font-family:'Fredoka',cursive}
+.font-tribal{font-family:'Cinzel',serif}
+.glass-card{background:linear-gradient(135deg,rgba(15,38,24,.92) 0%,rgba(8,20,12,.95) 100%);backdrop-filter:blur(14px);border:1px solid rgba(74,222,128,.3);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.glass-card-amber{background:linear-gradient(135deg,rgba(45,26,9,.94) 0%,rgba(20,10,3,.96) 100%);backdrop-filter:blur(14px);border:1px solid rgba(245,158,11,.5);box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.kwatia-paper{background:#fef3c7;background-image:radial-gradient(#fde68a 1px,transparent 0);background-size:16px 16px;color:#451a03;border:6px solid #854d0e;box-shadow:0 20px 50px rgba(0,0,0,.8),inset 0 0 40px rgba(180,83,9,.2);border-radius:1.5rem}
+.btn-touch{background:rgba(34,197,94,.3);border:2px solid rgba(74,222,128,.5);backdrop-filter:blur(6px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.btn-touch:active{background:rgba(34,197,94,.7);transform:scale(.92)}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 15px rgba(245,158,11,.6);transform:scale(1)}50%{box-shadow:0 0 30px rgba(245,158,11,.9);transform:scale(1.03)}}
+.animate-glow{animation:pulseGlow 2s infinite ease-in-out}
+.character-card{transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.character-card:hover{transform:translateY(-8px) scale(1.02);border-color:#facc15;box-shadow:0 15px 35px rgba(245,158,11,.4)}
+.compass-ring{width:56px;height:56px;border-radius:50%;border:3px solid #facc15;background:rgba(15,38,24,.85);backdrop-filter:blur(8px);position:relative;box-shadow:0 4px 15px rgba(0,0,0,.5)}
+.compass-needle{position:absolute;top:50%;left:50%;width:4px;height:40px;margin-top:-20px;margin-left:-2px;transition:transform .05s linear}
+.hw-bar{height:10px;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15)}
+.hw-bar>div{height:100%;transition:width .25s}
+.phase-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.phase-pill.done{background:rgba(34,197,94,.35);color:#bbf7d0;border:1px solid rgba(34,197,94,.7)}
+.phase-pill.current{background:rgba(245,158,11,.35);color:#fde68a;border:1px solid rgba(245,158,11,.7)}
+.phase-pill.locked{background:rgba(255,255,255,.06);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.12)}
+.crosshair{position:fixed;top:50%;left:50%;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none;z-index:15;opacity:0;transition:opacity .2s}
+.crosshair.active{opacity:1}
+.crosshair::before,.crosshair::after{content:'';position:absolute;background:#facc15;box-shadow:0 0 6px rgba(0,0,0,.6)}
+.crosshair::before{left:8px;top:0;width:2px;height:18px}
+.crosshair::after{top:8px;left:0;width:18px;height:2px}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:12px;background:rgba(0,0,0,.85);color:#fde68a;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:40;max-width:90vw;text-align:center}
+.toast.visible{opacity:1}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#050e08}
+::-webkit-scrollbar-thumb{background:#059669;border-radius:4px}
+</style>
 </head>
-<body>
-<canvas id="game-canvas"></canvas>
+<body class="h-screen w-screen relative">
 
-<div id="loading">
-  <div class="loading-box">
-    <div class="loading-logo">TAPE MARANGATU</div>
-    <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
-    <div class="loading-msg" id="loading-msg">Preparando a floresta…</div>
-  </div>
-</div>
-
-<div id="menu">
-  <div id="menu-main" class="menu-panel">
-    <h1 class="logo">TAPE MARANGATU</h1>
-    <h2 class="logo-sub">AVENTURA DOS 21 CAMINHOS</h2>
-    <button id="btn-jogar" class="btn">JOGAR</button>
-    <button id="btn-continuar" class="btn btn-alt">CONTINUAR</button>
-    <button id="btn-mapa" class="btn btn-alt">MAPA DOS CAMINHOS</button>
-    <button id="btn-medalhas" class="btn btn-alt">MEDALHAS</button>
-    <button id="btn-config" class="btn btn-alt">CONFIGURAÇÕES</button>
-    <div id="menu-toast" class="toast"></div>
-  </div>
-  <div id="menu-personagens" class="menu-panel hidden">
-    <h2 class="logo-sub">ESCOLHA SEU PERSONAGEM</h2>
-    <div class="char-grid">
-      <button id="btn-konomi" class="char-btn"><span class="char-name">KONOMI</span><span class="char-desc">Jovem arqueiro</span></button>
-      <button id="btn-kunhatai" class="char-btn"><span class="char-name">KUNHATAĨ</span><span class="char-desc">Jovem arqueira</span></button>
+<div id="character-select-screen" class="absolute inset-0 z-50 bg-gradient-to-br from-[#02130b] via-[#0b2b18] to-[#041208] flex items-center justify-center p-4">
+  <div class="glass-card-amber max-w-xl w-full rounded-3xl p-6 md:p-8 border-2 border-amber-500/50 text-center shadow-2xl relative overflow-hidden">
+    <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="mb-6">
+      <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold font-tribal">Vocabulário Bilíngue Tupi-Guarani</span>
+      <h1 class="font-game text-3xl md:text-5xl font-bold bg-gradient-to-r from-amber-300 via-emerald-300 to-amber-100 bg-clip-text text-transparent mt-1">Tape Marangatu</h1>
+      <p class="text-xs md:text-sm text-emerald-200/90 mt-2">Percorre os 21 caminhos e aprende as palavras do Vocabulário Bilíngue Tupi-Guarani — Português (FISPI/FEUSP).</p>
     </div>
-    <button id="btn-voltar-personagens" class="btn btn-alt" style="margin-top:16px">Voltar</button>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div onclick="selectCharacter('konomi')" class="character-card glass-card p-5 rounded-2xl border-2 border-emerald-500/30 flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-amber-600/40 border-2 border-amber-400 flex items-center justify-center text-4xl mb-3 shadow-inner">👦🏽</div>
+        <h3 class="font-game text-xl text-amber-300">Konomi</h3>
+        <p class="text-xs text-emerald-300/80 mt-1 text-center">RAPAZ (KONOMĨ) — pág. 38</p>
+      </div>
+      <div onclick="selectCharacter('kunhatai')" class="character-card glass-card p-5 rounded-2xl border-2 border-emerald-500/30 flex flex-col items-center">
+        <div class="w-20 h-20 rounded-full bg-emerald-600/40 border-2 border-amber-400 flex items-center justify-center text-4xl mb-3 shadow-inner">👧🏽</div>
+        <h3 class="font-game text-xl text-amber-300">Kunhataĩ</h3>
+        <p class="text-xs text-emerald-300/80 mt-1 text-center">MOÇA (KUNHATAĨ) — pág. 39</p>
+      </div>
+    </div>
+    <div id="continue-row" class="hidden mb-3">
+      <button onclick="continueGame()" class="w-full py-3 bg-amber-700 hover:bg-amber-600 text-amber-50 font-bold rounded-xl text-sm">
+        <i class="fas fa-play mr-2"></i>Continuar de onde parei
+      </button>
+    </div>
+    <div class="text-[11px] text-emerald-400/70 font-medium">Clica num dos personagens para começar o jogo 3D</div>
   </div>
 </div>
 
-<div id="hud">
-  <div class="hud-top">
-    <div class="hud-bar"><span>VIDA</span><div class="bar"><div id="hud-vida-fill" class="fill fill-vida"></div></div></div>
-    <div class="hud-bar"><span>ENERGIA</span><div class="bar"><div id="hud-energia-fill" class="fill fill-energia"></div></div></div>
-    <div class="hud-stat">🏹 <span id="hud-flechas">10</span></div>
-    <div class="hud-stat">⭐ <span id="hud-pontos">0</span></div>
-    <button id="btn-menu" class="btn btn-small">Menu</button>
+<header id="game-header" class="absolute top-0 left-0 w-full px-4 py-3 flex justify-between items-center z-20 pointer-events-auto hidden gap-2 flex-wrap">
+  <div class="glass-card px-4 py-2 rounded-xl flex items-center space-x-3">
+    <div id="player-avatar-icon" class="w-10 h-10 rounded-full bg-amber-600 border-2 border-amber-300 flex items-center justify-center text-amber-100 font-bold text-xl shadow-lg">👦🏽</div>
+    <div>
+      <h1 class="font-game text-sm md:text-lg font-bold bg-gradient-to-r from-amber-300 to-emerald-400 bg-clip-text text-transparent">Tape Marangatu 3D</h1>
+      <p id="player-name-display" class="text-[10px] text-emerald-300/80">Guardião: Konomi</p>
+    </div>
   </div>
-  <div id="hud-objective" class="hud-objective"></div>
+  <div class="glass-card px-3 py-2 rounded-xl text-[10px] flex flex-col gap-1 min-w-[160px]">
+    <div class="flex items-center justify-between"><span class="text-emerald-300/80 font-bold">VIDA</span><span id="hw-vida" class="text-emerald-100 font-mono">100</span></div>
+    <div class="hw-bar"><div id="hw-vida-fill" style="width:100%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+    <div class="flex items-center justify-between mt-1"><span class="text-emerald-300/80 font-bold">ENERGIA</span><span id="hw-energia" class="text-emerald-100 font-mono">100</span></div>
+    <div class="hw-bar"><div id="hw-energia-fill" style="width:100%;background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></div></div>
+  </div>
+  <div class="flex items-center space-x-3 flex-wrap gap-2">
+    <div class="compass-ring flex items-center justify-center" title="Bússola">
+      <span class="absolute top-0.5 text-[9px] font-bold text-amber-400">N</span>
+      <div id="compass-needle" class="compass-needle flex flex-col justify-between items-center">
+        <div class="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[14px] border-b-red-500"></div>
+        <div class="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[14px] border-t-white"></div>
+      </div>
+    </div>
+    <div class="glass-card px-3 py-2 rounded-xl text-[10px] flex items-center gap-2">
+      <i class="fas fa-flag-checkered text-amber-400"></i>
+      <span id="phase-indicator" class="text-amber-200 font-semibold">1 / 21 — AWATI</span>
+    </div>
+    <div class="glass-card px-3 py-2 rounded-xl text-[10px] flex items-center gap-2">
+      <i class="fas fa-crosshairs text-amber-400"></i>
+      <span id="hud-flechas" class="text-amber-200 font-mono">10</span>
+      <i class="fas fa-star text-amber-400 ml-1"></i>
+      <span id="hud-pontos" class="text-amber-200 font-mono">0</span>
+    </div>
+  </div>
+</header>
+
+<div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+<div id="crosshair" class="crosshair"></div>
+<div id="toast" class="toast"></div>
+
+<div class="absolute bottom-6 right-6 z-20 flex flex-col items-end space-y-2 pointer-events-auto">
+  <button id="btn-interact" onclick="checkCurrentProximity()" class="hidden glass-card bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold px-6 py-3.5 rounded-2xl shadow-xl flex items-center space-x-2 text-sm border-2 border-amber-200 animate-glow">
+    <i class="fas fa-book-open text-lg"></i><span id="interact-label">Ler Kwatiá</span>
+  </button>
+  <button onclick="openMapModal()" class="glass-card px-4 py-2.5 rounded-xl text-[11px] text-emerald-200 font-semibold border border-emerald-500/40 hover:bg-emerald-900/40"><i class="fas fa-map mr-1 text-amber-400"></i> Mapa</button>
+  <button onclick="openMedalsModal()" class="glass-card px-4 py-2.5 rounded-xl text-[11px] text-emerald-200 font-semibold border border-emerald-500/40 hover:bg-emerald-900/40"><i class="fas fa-medal mr-1 text-amber-400"></i> Medalhas</button>
+  <button onclick="saveProgress(true)" class="glass-card px-4 py-2.5 rounded-xl text-[11px] text-emerald-200 font-semibold border border-emerald-500/40 hover:bg-emerald-900/40"><i class="fas fa-save mr-1 text-amber-400"></i> Salvar</button>
 </div>
 
-<div id="mobile">
-  <div id="mobile-joy" class="mobile-joy"><div id="mobile-joy-nub" class="mobile-joy-nub"></div></div>
-  <div class="mobile-btns">
-    <button id="mobile-jump" class="mobile-btn">▲</button>
+<div id="touch-controls" class="absolute bottom-6 left-6 grid grid-cols-3 gap-2 w-36 h-36 md:hidden z-20 pointer-events-auto hidden">
+  <div></div><button id="btn-up" class="btn-touch rounded-t-xl text-emerald-300 text-xl font-bold flex items-center justify-center">▲</button><div></div>
+  <button id="btn-left" class="btn-touch rounded-l-xl text-emerald-300 text-xl font-bold flex items-center justify-center">◄</button>
+  <button id="btn-jump" onclick="triggerJump()" class="btn-touch rounded-lg text-amber-300 text-xs font-bold flex items-center justify-center">PULAR</button>
+  <button id="btn-right" class="btn-touch rounded-r-xl text-emerald-300 text-xl font-bold flex items-center justify-center">►</button>
+  <div></div><button id="btn-down" class="btn-touch rounded-b-xl text-emerald-300 text-xl font-bold flex items-center justify-center">▼</button><div></div>
+</div>
+
+<div id="keyboard-tip" class="hidden md:flex absolute bottom-4 left-4 glass-card px-4 py-2 rounded-xl text-[11px] text-emerald-300/90 items-center space-x-3 z-20">
+  <i class="fas fa-mouse text-amber-400 text-sm"></i>
+  <span><b>WASD</b> mover | <b>ESPAÇO</b> pular/interagir | <b>Botão Dir</b> mirar | <b>Botão Esq</b> flecha | <b>R</b> recarregar | <b>Arrastar</b> câmera</span>
+</div>
+
+<div id="read-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div class="kwatia-paper max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col justify-between">
+    <div class="flex justify-between items-start border-b-2 border-amber-900/30 pb-3">
+      <div>
+        <span id="kwatia-title" class="font-game text-3xl text-amber-950 font-bold">AWATI</span>
+        <p id="kwatia-meaning" class="text-sm text-amber-900/80 font-semibold mt-1">MILHO — pág. 11</p>
+      </div>
+      <button onclick="closeModal('read-modal')" class="text-amber-950 hover:text-amber-700 text-2xl font-bold">✕</button>
+    </div>
+    <div class="my-4 flex-1 overflow-y-auto space-y-3 pr-1">
+      <div id="kwatia-illustration" class="w-full h-36 bg-amber-100 rounded-xl border-2 border-amber-800/30 flex items-center justify-center text-6xl shadow-inner">🌽</div>
+      <div class="bg-amber-100/70 rounded-xl p-3 border border-amber-800/20">
+        <p class="text-[11px] uppercase tracking-wide text-amber-800/70 font-bold mb-1">Variantes no dicionário</p>
+        <p id="kwatia-variants" class="text-sm text-amber-950 font-semibold">—</p>
+      </div>
+    </div>
+    <button onclick="openQuestionModal()" class="w-full py-3.5 bg-amber-900 hover:bg-amber-800 text-amber-100 font-bold rounded-xl shadow-lg flex items-center justify-center space-x-2 transition text-sm">
+      <span>Responder ao Enigma da Kwatiá</span><i class="fas fa-arrow-right"></i>
+    </button>
   </div>
 </div>
 
-<script type="module" src="src/main.js"></script>
+<div id="question-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div class="glass-card max-w-md w-full rounded-2xl p-6 border-2 border-amber-400/60 shadow-2xl">
+    <div class="flex items-center space-x-3 mb-4 border-b border-emerald-500/30 pb-3">
+      <div class="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-amber-950 font-bold text-xl">❓</div>
+      <div>
+        <h3 class="font-game text-lg text-amber-300">Desafio de Interpretação</h3>
+        <p class="text-[11px] text-emerald-300">Escolhe a palavra em Tupi-Guarani.</p>
+      </div>
+    </div>
+    <p id="question-prompt" class="text-sm text-emerald-100 font-medium mb-4 leading-relaxed"></p>
+    <div id="options-container" class="space-y-2.5 mb-4"></div>
+    <div class="flex justify-end">
+      <button onclick="closeModal('question-modal')" class="text-xs text-emerald-400 hover:text-emerald-200">Voltar ao texto</button>
+    </div>
+  </div>
+</div>
+
+<div id="map-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div class="glass-card max-w-lg w-full max-h-[85vh] rounded-2xl p-6 border-2 border-emerald-400/60 shadow-2xl flex flex-col">
+    <div class="flex justify-between items-center mb-4 border-b border-emerald-500/30 pb-3">
+      <h3 class="font-game text-lg text-amber-300"><i class="fas fa-map mr-2"></i>Mapa dos 21 Caminhos</h3>
+      <button onclick="closeModal('map-modal')" class="text-emerald-400 hover:text-emerald-200 text-xl">✕</button>
+    </div>
+    <div id="map-list" class="space-y-2 overflow-y-auto pr-1"></div>
+  </div>
+</div>
+
+<div id="medals-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+  <div class="glass-card max-w-lg w-full max-h-[85vh] rounded-2xl p-6 border-2 border-amber-400/60 shadow-2xl flex flex-col">
+    <div class="flex justify-between items-center mb-4 border-b border-emerald-500/30 pb-3">
+      <h3 class="font-game text-lg text-amber-300"><i class="fas fa-medal mr-2"></i>Medalhas</h3>
+      <button onclick="closeModal('medals-modal')" class="text-emerald-400 hover:text-emerald-200 text-xl">✕</button>
+    </div>
+    <div id="medals-list" class="space-y-2 overflow-y-auto pr-1"></div>
+  </div>
+</div>
+
+<script>
+const SAVE_KEY='tape_marangatu_save_v4';
+let selectedCharacter=null, gameStarted=false, currentPhase=1, activeInteractiveObject=null;
+let playerHP=100, playerEnergy=100, playerArrows=10, playerScore=0;
+let unlockedMedals=[], invulnTimer=0, aiming=false, arrowCooldown=0, rechargeTimer=0;
+
+const PHASE_LIST=[
+ {n:1,name:'AWATI',icon:'🌽',z:15,limite:8,title:'Fase 1 — AWATI'},
+ {n:2,name:'DJAGWARETE',icon:'🐆',z:-35,limite:-8,title:'Fase 2 — DJAGWARETE'},
+ {n:3,name:'MBOI',icon:'🐍',z:-52,limite:-42,title:'Fase 3 — MBOI'},
+ {n:4,name:'NHANDU',icon:'🕷️',z:-68,limite:-60,title:'Fase 4 — NHANDU'},
+ {n:5,name:'GWYRÁ',icon:'🐦',z:-84,limite:-76,title:'Fase 5 — GWYRÁ'},
+ {n:6,name:'ITA',icon:'🪨',z:-100,limite:-92,title:'Fase 6 — ITA'},
+ {n:7,name:"Y'Y",icon:'💧',z:-116,limite:-108,title:"Fase 7 — Y'Y"},
+ {n:8,name:'TATÁ',icon:'🔥',z:-132,limite:-124,title:'Fase 8 — TATÁ'},
+ {n:9,name:'ARY',icon:'⏳',z:-148,limite:-140,title:'Fase 9 — ARY'},
+ {n:10,name:'KUNHÃ',icon:'👤',z:-164,limite:-156,title:'Fase 10 — KUNHÃ'},
+ {n:11,name:'KWARAY',icon:'☀️',z:-180,limite:-172,title:'Fase 11 — KWARAY'},
+ {n:12,name:'DJATSY',icon:'🌙',z:-196,limite:-188,title:'Fase 12 — DJATSY'},
+ {n:13,name:'IWYTU',icon:'🌪️',z:-212,limite:-204,title:'Fase 13 — IWYTU'},
+ {n:14,name:'OKY',icon:'🌧️',z:-228,limite:-220,title:'Fase 14 — OKY'},
+ {n:15,name:'POTY',icon:'🌸',z:-244,limite:-236,title:'Fase 15 — POTY'},
+ {n:16,name:'YWYRA',icon:'🌳',z:-260,limite:-252,title:'Fase 16 — YWYRA'},
+ {n:17,name:'DJAPÓ',icon:'🧵',z:-276,limite:-268,title:'Fase 17 — DJAPÓ'},
+ {n:18,name:'GWATA',icon:'👣',z:-292,limite:-284,title:'Fase 18 — GWATA'},
+ {n:19,name:'PORÃ',icon:'✨',z:-308,limite:-300,title:'Fase 19 — PORÃ'},
+ {n:20,name:'TAPE',icon:'🛤️',z:-324,limite:-316,title:'Fase 20 — TAPE'},
+ {n:21,name:'NHANDEWA',icon:'👑',z:-340,limite:-332,title:'Fase 21 — NHANDEWA'}
+];
+const PHASE_CONFIG={}; for(const p of PHASE_LIST) PHASE_CONFIG[p.n]=p;
+
+const KWATIA_CONTENT={
+ 1:{name:'AWATI',meaning:'MILHO',page:11,icon:'🌽',variants:'AWATI PORORÓ = milho estourado (pipoca) — pág. 12'},
+ 2:{name:'DJAGWARETE',meaning:'ONÇA',page:14,icon:'🐆',variants:'TUTY / DJAGWA / DJAGWARETE = onça — pág. 14 e 77'},
+ 3:{name:'MBOI',meaning:'COBRA',page:47,icon:'🐍',variants:"BÓI [BA] / MBOI [PI] [PY] = cobra — pág. 47"},
+ 4:{name:'NHANDU',meaning:'ARANHA',page:56,icon:'🕷️',variants:'NHANDU [PY] [BA] = aranha — pág. 56'},
+ 5:{name:'GWYRÁ',meaning:'PÁSSARO',page:29,icon:'🐦',variants:'GWYRA’I = passarinho — pág. 29'},
+ 6:{name:'ITA',meaning:'PEDRA',page:33,icon:'🪨',variants:'ITA PORÃ = pedra bonita; ITATY = pedreira — pág. 33'},
+ 7:{name:"Y'Y",meaning:'ÁGUA',page:90,icon:'💧',variants:'YY / Y’Y [PI] = água — pág. 90'},
+ 8:{name:'TATÁ',meaning:'FOGO',page:76,icon:'🔥',variants:'TATÁ [PI] [BA] = fogo; TATAENDY = luz — pág. 76'},
+ 9:{name:'ARY',meaning:'TEMPO',page:11,icon:'⏳',variants:'ARY = tempo; ARÝ = dia — pág. 11'},
+ 10:{name:'KUNHÃ',meaning:'MULHER',page:39,icon:'👤',variants:'KUNHÃ [PI] [BA] = mulher — pág. 39'},
+ 11:{name:'KWARAY',meaning:'SOL',page:39,icon:'☀️',variants:'KWARAY = sol — pág. 39'},
+ 12:{name:'DJATSY',meaning:'LUA',page:16,icon:'🌙',variants:'DJATSY = lua; DJATSY-TATÁ = estrela — pág. 16'},
+ 13:{name:'IWYTU',meaning:'VENTO',page:34,icon:'🌪️',variants:'IWYTU = vento — pág. 34'},
+ 14:{name:'OKY',meaning:'CHUVA / CHOVER',page:61,icon:'🌧️',variants:'OKY = chuva / chover [PI] — pág. 61'},
+ 15:{name:'POTY',meaning:'FLOR',page:68,icon:'🌸',variants:'POTY / YWYRÁ POTI = flor — pág. 68 e 91'},
+ 16:{name:'YWYRA',meaning:'ÁRVORE / MADEIRA',page:91,icon:'🌳',variants:'YWYRA / WYRÁ [BA] = árvore / madeira — pág. 91 e 88'},
+ 17:{name:'DJAPÓ',meaning:'FAZER',page:46,icon:'🧵',variants:'DJAPÓ / DJAPO / ODJAPÓ [BA] = fazer — pág. 46 e 15'},
+ 18:{name:'GWATA',meaning:'ANDO (andar)',page:7,icon:'👣',variants:'AGWATA = ando; DJAGWATA = andar — pág. 7 e 14'},
+ 19:{name:'PORÃ',meaning:'BOM / BEM / BONITO',page:67,icon:'✨',variants:'PORÃ = bom / bem / bonito; PORÃ ETE = obrigado — pág. 67'},
+ 20:{name:'TAPE',meaning:'CAMINHO',page:76,icon:'🛤️',variants:'TAPE [PI] = caminho — pág. 76'},
+ 21:{name:'NHANDEWA',meaning:'INDÍGENA',page:56,icon:'👑',variants:'NHANDEWA = indígena — pág. 56'}
+};
+
+const QUIZ={
+ 1:{q:'Qual palavra significa MILHO?',o:[['AWATI',true],['ITA',false],['ARY',false],['TATÁ',false]]},
+ 2:{q:'Qual palavra significa ONÇA?',o:[['DJAGWARETE',true],['GWYRÁ',false],['MBOI',false],['NHANDU',false]]},
+ 3:{q:'Qual palavra significa COBRA?',o:[['MBOI',true],['TATÁ',false],['Y’Y',false],['ITA',false]]},
+ 4:{q:'Qual palavra significa ARANHA?',o:[['NHANDU',true],['MBOI',false],['GWYRÁ',false],['POTY',false]]},
+ 5:{q:'Qual palavra significa PÁSSARO?',o:[['GWYRÁ',true],['MBOI',false],['ITA',false],['KUNHÃ',false]]},
+ 6:{q:'Qual palavra significa PEDRA?',o:[['ITA',true],['TAPE',false],['ARY',false],['OKY',false]]},
+ 7:{q:'Qual palavra significa ÁGUA?',o:[["Y'Y",true],['TATÁ',false],['IWYTU',false],['POTY',false]]},
+ 8:{q:'Qual palavra significa FOGO?',o:[['TATÁ',true],["Y'Y",false],['KWARAY',false],['ITA',false]]},
+ 9:{q:'Qual palavra significa TEMPO?',o:[['ARY',true],['TATÁ',false],['PORÃ',false],['NHANDU',false]]},
+ 10:{q:'Qual palavra significa MULHER?',o:[['KUNHÃ',true],['GWYRÁ',false],['TAPE',false],['OKY',false]]},
+ 11:{q:'Qual palavra significa SOL?',o:[['KWARAY',true],['DJATSY',false],['TATÁ',false],['IWYTU',false]]},
+ 12:{q:'Qual palavra significa LUA?',o:[['DJATSY',true],['KWARAY',false],['ITA',false],['POTY',false]]},
+ 13:{q:'Qual palavra significa VENTO?',o:[['IWYTU',true],['OKY',false],['TATÁ',false],['MBOI',false]]},
+ 14:{q:'Qual palavra significa CHUVA / CHOVER?',o:[['OKY',true],['IWYTU',false],['KWARAY',false],['ARY',false]]},
+ 15:{q:'Qual palavra significa FLOR?',o:[['POTY',true],['YWYRA',false],['NHANDU',false],['ITA',false]]},
+ 16:{q:'Qual palavra significa ÁRVORE / MADEIRA?',o:[['YWYRA',true],['POTY',false],['TAPE',false],['KUNHÃ',false]]},
+ 17:{q:'Qual palavra significa FAZER?',o:[['DJAPÓ',true],['GWATA',false],['TATÁ',false],['ARY',false]]},
+ 18:{q:'Qual palavra significa ANDO (andar)?',o:[['GWATA',true],['TAPE',false],['PORÃ',false],['MBOI',false]]},
+ 19:{q:'Qual palavra significa BOM / BEM / BONITO?',o:[['PORÃ',true],['DJAPÓ',false],['OKY',false],['ITA',false]]},
+ 20:{q:'Qual palavra significa CAMINHO?',o:[['TAPE',true],['GWATA',false],['KUNHÃ',false],['NHANDU',false]]},
+ 21:{q:'Qual palavra significa INDÍGENA?',o:[['NHANDEWA',true],['KUNHÃ',false],['TAPE',false],['ARY',false]]}
+};
+
+const container=document.getElementById('canvas-container');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x87ceeb);
+scene.fog=new THREE.FogExp2(0x9be2ff,0.008);
+const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xfffaed,0.75));
+const sunLight=new THREE.DirectionalLight(0xfff5cc,1.25);
+sunLight.position.set(40,70,30);
+sunLight.castShadow=true;
+sunLight.shadow.mapSize.width=2048; sunLight.shadow.mapSize.height=2048;
+sunLight.shadow.camera.near=0.5; sunLight.shadow.camera.far=400;
+sunLight.shadow.camera.left=-100; sunLight.shadow.camera.right=100;
+sunLight.shadow.camera.top=100; sunLight.shadow.camera.bottom=-100;
+scene.add(sunLight);
+const sunMesh=new THREE.Mesh(new THREE.SphereGeometry(5,16,16),new THREE.MeshBasicMaterial({color:0xfff066}));
+sunMesh.position.set(90,150,50); scene.add(sunMesh);
+
+const terrain=new THREE.Mesh(new THREE.PlaneGeometry(500,800,32,64),new THREE.MeshLambertMaterial({color:0x2e7d32}));
+terrain.rotation.x=-Math.PI/2; terrain.position.z=-200; terrain.receiveShadow=true; scene.add(terrain);
+
+const curvePoints=[
+ new THREE.Vector3(0,0,45), new THREE.Vector3(3,0,30), new THREE.Vector3(-6,0,15),
+ new THREE.Vector3(-4,0,0), new THREE.Vector3(5,0,-15), new THREE.Vector3(2,0,-30),
+ new THREE.Vector3(0,0,-50), new THREE.Vector3(-3,0,-68), new THREE.Vector3(0,0,-100),
+ new THREE.Vector3(4,0,-132), new THREE.Vector3(-2,0,-164), new THREE.Vector3(3,0,-196),
+ new THREE.Vector3(-1,0,-228), new THREE.Vector3(2,0,-260), new THREE.Vector3(-2,0,-292),
+ new THREE.Vector3(0,0,-340)
+];
+const pathSpline=new THREE.CatmullRomCurve3(curvePoints);
+const trailGeometry=new THREE.PlaneGeometry(8,400,32,128);
+const tVerts=trailGeometry.attributes.position;
+for(let i=0;i<tVerts.count;i++){
+ const u=(tVerts.getY(i)+200)/400;
+ const pt=pathSpline.getPointAt(Math.max(0,Math.min(1,u)));
+ const tan=pathSpline.getTangentAt(Math.max(0,Math.min(1,u)));
+ const norm=new THREE.Vector3(-tan.z,0,tan.x).normalize();
+ const finalPos=pt.clone().add(norm.multiplyScalar(tVerts.getX(i)));
+ tVerts.setXYZ(i,finalPos.x,finalPos.z,0.03);
+}
+trailGeometry.computeVertexNormals();
+const trailMesh=new THREE.Mesh(trailGeometry,new THREE.MeshLambertMaterial({color:0x8d6e63,side:THREE.DoubleSide}));
+trailMesh.rotation.x=-Math.PI/2; trailMesh.receiveShadow=true; scene.add(trailMesh);
+
+function getTrailXAtZ(z){const u=Math.max(0,Math.min(1,(45-z)/385));return pathSpline.getPointAt(u).x;}
+
+function createTree(x,z,scale=1){
+ const g=new THREE.Group();
+ const trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.4*scale,0.7*scale,9*scale,8),new THREE.MeshLambertMaterial({color:0x4e342e}));
+ trunk.position.y=4.5*scale; trunk.castShadow=true; g.add(trunk);
+ const colors=[0x1b5e20,0x2e7d32,0x388e3c];
+ for(let i=0;i<3;i++){
+  const leaves=new THREE.Mesh(new THREE.DodecahedronGeometry((3.6-i*0.6)*scale),new THREE.MeshLambertMaterial({color:colors[i],flatShading:true}));
+  leaves.position.y=(7+i*2.2)*scale; leaves.castShadow=true; g.add(leaves);
+ }
+ g.position.set(x,0,z); scene.add(g); return g;
+}
+function createBush(x,z,scale=1){
+ const g=new THREE.Group();
+ const mat=new THREE.MeshLambertMaterial({color:0x2e7d32,flatShading:true});
+ for(let i=0;i<4;i++){
+  const s=new THREE.Mesh(new THREE.DodecahedronGeometry((0.8+Math.random()*0.4)*scale),mat);
+  s.position.set((Math.random()-0.5)*scale,(0.5+Math.random()*0.3)*scale,(Math.random()-0.5)*scale);
+  s.castShadow=true; g.add(s);
+ }
+ g.position.set(x,0,z); scene.add(g); return g;
+}
+for(let z=-340;z<=70;z+=10){
+ const tx=getTrailXAtZ(z);
+ createTree(tx-9-Math.random()*25,z+(Math.random()-0.5)*4,1+Math.random()*0.4);
+ createTree(tx+9+Math.random()*25,z+(Math.random()-0.5)*4,1+Math.random()*0.4);
+ if(Math.abs(z%20)<5){
+  createBush(tx-4.5-Math.random()*2,z,1.2);
+  createBush(tx+4.5+Math.random()*2,z,1.2);
+ }
+}
+
+function buildCharacterModel(isKunhatai=false){
+ const g=new THREE.Group();
+ const skin=0xb87352, cloth=isKunhatai?0x059669:0xd97706, hair=0x1c1917;
+ const torso=new THREE.Mesh(new THREE.CylinderGeometry(0.38,0.32,1.1,8),new THREE.MeshLambertMaterial({color:cloth}));
+ torso.position.y=1.0; torso.castShadow=true; g.add(torso);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(0.38,16,16),new THREE.MeshLambertMaterial({color:skin}));
+ head.position.y=1.8; head.castShadow=true; g.add(head);
+ const hairGeo=isKunhatai?new THREE.ConeGeometry(0.48,0.9,12):new THREE.SphereGeometry(0.4,12,12);
+ const hairMesh=new THREE.Mesh(hairGeo,new THREE.MeshLambertMaterial({color:hair}));
+ hairMesh.position.set(0,1.95,isKunhatai?-0.1:-0.05); if(isKunhatai)hairMesh.rotation.x=-0.3; g.add(hairMesh);
+ const feather=new THREE.Mesh(new THREE.ConeGeometry(0.08,0.55,4),new THREE.MeshBasicMaterial({color:0xef4444}));
+ feather.position.set(isKunhatai?0.2:0,2.2,-0.1); feather.rotation.z=isKunhatai?-0.3:0; g.add(feather);
+ const skinMat=new THREE.MeshLambertMaterial({color:skin});
+ const armGeo=new THREE.CylinderGeometry(0.1,0.08,0.7);
+ const lap=new THREE.Group(); lap.position.set(-0.48,1.45,0);
+ { const a=new THREE.Mesh(armGeo,skinMat); a.position.y=-0.35; lap.add(a); } g.add(lap);
+ const rap=new THREE.Group(); rap.position.set(0.48,1.45,0);
+ { const a=new THREE.Mesh(armGeo,skinMat); a.position.y=-0.35; rap.add(a); } g.add(rap);
+ const legGeo=new THREE.CylinderGeometry(0.12,0.09,0.75);
+ const llp=new THREE.Group(); llp.position.set(-0.2,0.7,0);
+ { const l=new THREE.Mesh(legGeo,skinMat); l.position.y=-0.375; llp.add(l); } g.add(llp);
+ const rlp=new THREE.Group(); rlp.position.set(0.2,0.7,0);
+ { const l=new THREE.Mesh(legGeo,skinMat); l.position.y=-0.375; rlp.add(l); } g.add(rlp);
+ g.position.set(0,0,35);
+ return {mesh:g,head,torso,leftArmPivot:lap,rightArmPivot:rap,leftLegPivot:llp,rightLegPivot:rlp};
+}
+
+let player=buildCharacterModel(false);
+scene.add(player.mesh);
+
+function buildLandmark(phase){
+ const cfg=PHASE_CONFIG[phase];
+ const g=new THREE.Group();
+ const ringColor=new THREE.Color().setHSL((phase/21)*0.7,0.85,0.55);
+ const ring=new THREE.Mesh(new THREE.RingGeometry(1.4,1.9,32),new THREE.MeshBasicMaterial({color:ringColor,side:THREE.DoubleSide}));
+ ring.rotation.x=-Math.PI/2; ring.position.y=0.05; g.add(ring);
+ switch(phase){
+  case 1:{
+   const s=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.2,4.2,8),new THREE.MeshLambertMaterial({color:0x65a30d}));
+   s.position.y=2.1; g.add(s);
+   for(let i=0;i<5;i++){
+    const l=new THREE.Mesh(new THREE.ConeGeometry(0.4,2.5,5),new THREE.MeshLambertMaterial({color:0x65a30d}));
+    l.position.y=1+i*0.6; l.rotation.z=(i%2===0?1:-1)*0.7; g.add(l);
+   }
+   const c=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.2,1.4,8),new THREE.MeshLambertMaterial({color:0xeab308}));
+   c.position.set(0.35,2.3,0); c.rotation.z=-0.4; g.add(c); break;
+  }
+  case 2:{
+   const body=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.1,2.8),new THREE.MeshLambertMaterial({color:0xd97706}));
+   body.position.y=1.1; g.add(body);
+   const head=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.9,1.1),new THREE.MeshLambertMaterial({color:0xd97706}));
+   head.position.set(0,1.7,1.6); g.add(head); break;
+  }
+  case 3:{
+   const mat=new THREE.MeshLambertMaterial({color:0x3f6212});
+   for(let b=0;b<9;b++){
+    const seg=new THREE.Mesh(new THREE.SphereGeometry(0.25-b*0.018,8,8),mat);
+    seg.position.set(0,0.15,b*0.32); g.add(seg);
+   }
+   break;
+  }
+  case 4:{
+   const mat=new THREE.MeshLambertMaterial({color:0x18181b});
+   const body=new THREE.Mesh(new THREE.SphereGeometry(0.45,10,10),mat);
+   body.position.y=1.5; g.add(body);
+   for(let l=0;l<8;l++){
+    const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.03,0.9),mat);
+    leg.position.set((l<4?0.45:-0.45),1.3,(l%4)*0.22-0.33);
+    leg.rotation.z=l<4?-0.8:0.8; g.add(leg);
+   }
+   break;
+  }
+  case 7:{
+   const water=new THREE.Mesh(new THREE.CircleGeometry(3,32),new THREE.MeshLambertMaterial({color:0x3b82f6,transparent:true,opacity:0.75}));
+   water.rotation.x=-Math.PI/2; water.position.y=0.04; g.add(water); break;
+  }
+  case 8:{
+   const fire=new THREE.Mesh(new THREE.ConeGeometry(0.7,1.8,8),new THREE.MeshBasicMaterial({color:0xf97316}));
+   fire.position.y=0.9; g.add(fire); break;
+  }
+  case 11:{
+   const sun=new THREE.Mesh(new THREE.SphereGeometry(1.5,16,16),new THREE.MeshBasicMaterial({color:0xfacc15}));
+   sun.position.y=4; g.add(sun); break;
+  }
+  case 12:{
+   const moon=new THREE.Mesh(new THREE.SphereGeometry(1.2,16,16),new THREE.MeshBasicMaterial({color:0xe5e7eb}));
+   moon.position.y=4; g.add(moon); break;
+  }
+  case 15:{
+   const stem=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.1,1.8,6),new THREE.MeshLambertMaterial({color:0x65a30d}));
+   stem.position.y=0.9; g.add(stem);
+   const flower=new THREE.Mesh(new THREE.SphereGeometry(0.7,12,12),new THREE.MeshLambertMaterial({color:0xf472b6}));
+   flower.position.y=2.2; g.add(flower); break;
+  }
+  case 16: case 5:{
+   const trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.8,6,8),new THREE.MeshLambertMaterial({color:0x4e342e}));
+   trunk.position.y=3; g.add(trunk);
+   const crown=new THREE.Mesh(new THREE.DodecahedronGeometry(2.5),new THREE.MeshLambertMaterial({color:0x2e7d32,flatShading:true}));
+   crown.position.y=7; g.add(crown); break;
+  }
+  case 19: case 20: case 21:{
+   const arch=new THREE.Mesh(new THREE.TorusGeometry(2.2,0.35,8,32,Math.PI),new THREE.MeshLambertMaterial({color:phase===21?0xfacc15:0x93c5fd}));
+   arch.position.y=2.2; g.add(arch); break;
+  }
+  default:{
+   const base=new THREE.Mesh(new THREE.DodecahedronGeometry(1),new THREE.MeshLambertMaterial({color:ringColor}));
+   base.position.y=1; g.add(base);
+  }
+ }
+ g.position.set(getTrailXAtZ(cfg.z)+(phase%2===0?-3.5:3.5),0,cfg.z);
+ scene.add(g); return g;
+}
+const landmarks={};
+for(const p of PHASE_LIST) landmarks[p.n]=buildLandmark(p.n);
+
+const enemies=[];
+function buildEnemy(kind,x,z){
+ const g=new THREE.Group();
+ const conf={
+  cobra:{mat:0x3f6212,hp:20,speed:3,damage:8,climb:false},
+  onca:{mat:0xd97706,hp:60,speed:5.5,damage:18,climb:false},
+  aranha:{mat:0x18181b,hp:25,speed:2,damage:10,climb:false},
+  passaro:{mat:0x1e40af,hp:15,speed:4,damage:6,climb:true},
+  abelha:{mat:0xfacc15,hp:10,speed:3.5,damage:5,climb:true},
+  morcego:{mat:0x1a0a1a,hp:18,speed:4.2,damage:9,climb:true}
+ }[kind];
+ const mat=new THREE.MeshLambertMaterial({color:conf.mat});
+ if(kind==='cobra'){
+  for(let i=0;i<9;i++){
+   const s=new THREE.Mesh(new THREE.SphereGeometry(0.25-i*0.018,8,8),mat);
+   s.position.set(0,0.15,i*0.32); s.castShadow=true; g.add(s);
+  }
+ } else if(kind==='onca'){
+  const b=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.1,2.8),mat); b.position.y=1.1; b.castShadow=true; g.add(b);
+  const h=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.9,1.1),mat); h.position.set(0,1.7,1.6); g.add(h);
+ } else if(kind==='aranha'){
+  const body=new THREE.Mesh(new THREE.SphereGeometry(0.45,10,10),mat); body.scale.set(1,0.7,1.3); body.position.y=1.2; g.add(body);
+  for(let l=0;l<8;l++){
+   const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.03,0.9),mat);
+   leg.position.set((l<4?0.45:-0.45),1.0,(l%4)*0.22-0.33); leg.rotation.z=l<4?-0.8:0.8; g.add(leg);
+  }
+ } else if(kind==='passaro'){
+  const b=new THREE.Mesh(new THREE.SphereGeometry(0.4,8,8),mat); b.position.y=1.5; g.add(b);
+  const beak=new THREE.Mesh(new THREE.ConeGeometry(0.1,0.3,4),new THREE.MeshLambertMaterial({color:0xfbbf24}));
+  beak.rotation.x=Math.PI/2; beak.position.set(0,1.5,0.45); g.add(beak);
+ } else if(kind==='abelha'){
+  const b=new THREE.Mesh(new THREE.SphereGeometry(0.4,10,8),mat); b.scale.set(1.4,0.85,1); b.position.y=1; g.add(b);
+ } else if(kind==='morcego'){
+  const b=new THREE.Mesh(new THREE.CapsuleGeometry(0.25,0.45,4,8),mat); b.position.y=1.6; g.add(b);
+ }
+ g.position.set(x,0,z); scene.add(g);
+ enemies.push({mesh:g,kind,cfg:conf,hp:conf.hp,maxHp:conf.hp,home:new THREE.Vector3(x,0,z),cooldown:0,phaseAngle:Math.random()*Math.PI*2,alive:true});
+}
+
+const enemyKinds=[null,'passaro','onca','cobra','aranha','abelha','morcego','morcego','passaro','abelha','cobra','onca','cobra','morcego','abelha','passaro','aranha','onca','cobra','abelha','morcego','onca'];
+for(let p=1;p<=21;p++){
+ if(p===2) continue;
+ const kind=enemyKinds[p]; if(!kind) continue;
+ const cfg=PHASE_CONFIG[p];
+ const ex=getTrailXAtZ(cfg.z+6)+(p%2===0?4:-4);
+ buildEnemy(kind,ex,cfg.z+6);
+}
+
+const arrows=[];
+function fireArrow(){
+ if(arrowCooldown>0||playerArrows<=0) return;
+ playerArrows--; arrowCooldown=0.35;
+ document.getElementById('hud-flechas').innerText=playerArrows;
+ const dir=new THREE.Vector3(Math.sin(player.mesh.rotation.y),0.05,Math.cos(player.mesh.rotation.y)).normalize();
+ const arrow=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.9,6),new THREE.MeshLambertMaterial({color:0xd9c9a3}));
+ arrow.rotation.x=Math.PI/2;
+ const wrap=new THREE.Group(); wrap.add(arrow);
+ wrap.position.copy(player.mesh.position).add(new THREE.Vector3(0,1.3,0));
+ wrap.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),dir);
+ scene.add(wrap);
+ arrows.push({mesh:wrap,v:dir.clone().multiplyScalar(38),life:3,gravity:-14,damage:15});
+}
+
+let isMouseDown=false,prev={x:0,y:0};
+let cameraAngleYaw=0,cameraAnglePitch=0.35,cameraDistance=12;
+container.addEventListener('mousedown',(e)=>{
+ if(e.button===2) aiming=true;
+ else if(e.button===0) fireArrow();
+ isMouseDown=true; prev={x:e.clientX,y:e.clientY};
+});
+container.addEventListener('mousemove',(e)=>{
+ if(!isMouseDown) return;
+ cameraAngleYaw-=(e.clientX-prev.x)*0.007;
+ cameraAnglePitch=Math.max(0.1,Math.min(1.2,cameraAnglePitch+(e.clientY-prev.y)*0.007));
+ prev={x:e.clientX,y:e.clientY};
+});
+window.addEventListener('mouseup',(e)=>{isMouseDown=false;if(e.button===2)aiming=false;});
+container.addEventListener('contextmenu',e=>e.preventDefault());
+container.addEventListener('wheel',(e)=>{cameraDistance=Math.max(6,Math.min(26,cameraDistance+e.deltaY*0.015));});
+
+let playerVelocityY=0,isJumping=false;
+const gravity=-22;
+function triggerJump(){if(!isJumping){playerVelocityY=8.5;isJumping=true;}}
+
+const keys={};
+let touchDir={x:0,z:0};
+window.addEventListener('keydown',(e)=>{
+ keys[e.key.toLowerCase()]=true;
+ if(e.code==='Space'){ if(activeInteractiveObject) openKwatiaModal(); else triggerJump(); }
+ if(e.key.toLowerCase()==='r'){
+  playerArrows=10;
+  document.getElementById('hud-flechas').innerText=10;
+  playerScore=Math.max(0,playerScore-2);
+  document.getElementById('hud-pontos').innerText=playerScore;
+  showToast('Recarregado (−2 pts)');
+ }
+ if(e.key.toLowerCase()==='e' && activeInteractiveObject) openKwatiaModal();
+});
+window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+const setupTouch=(id,x,z)=>{
+ const btn=document.getElementById(id); if(!btn) return;
+ btn.addEventListener('touchstart',(e)=>{e.preventDefault();touchDir.x=x;touchDir.z=z;});
+ btn.addEventListener('touchend',(e)=>{e.preventDefault();touchDir.x=0;touchDir.z=0;});
+};
+setupTouch('btn-up',0,-1); setupTouch('btn-down',0,1); setupTouch('btn-left',-1,0); setupTouch('btn-right',1,0);
+
+function selectCharacter(char){
+ selectedCharacter=char; gameStarted=true;
+ if(char==='kunhatai'){ scene.remove(player.mesh); player=buildCharacterModel(true); scene.add(player.mesh); }
+ document.getElementById('character-select-screen').classList.add('hidden');
+ document.getElementById('game-header').classList.remove('hidden');
+ document.getElementById('touch-controls').classList.remove('hidden');
+ document.getElementById('player-avatar-icon').innerText=char==='konomi'?'👦🏽':'👧🏽';
+ document.getElementById('player-name-display').innerText=char==='konomi'
+   ?'Guardião: Konomi (KONOMĨ = rapaz)'
+   :'Guardiã: Kunhataĩ (KUNHATAĨ = moça)';
+ updatePhaseIndicator();
+}
+function updatePhaseIndicator(){
+ const cfg=PHASE_CONFIG[currentPhase];
+ document.getElementById('phase-indicator').innerText=`${currentPhase} / 21 — ${cfg.name}`;
+}
+function showToast(msg){
+ const t=document.getElementById('toast');
+ t.innerText=msg; t.classList.add('visible');
+ setTimeout(()=>t.classList.remove('visible'),2200);
+}
+function damagePlayer(amount){
+ if(invulnTimer>0) return;
+ playerHP=Math.max(0,playerHP-amount); invulnTimer=1.2;
+ document.getElementById('hw-vida').innerText=playerHP;
+ document.getElementById('hw-vida-fill').style.width=playerHP+'%';
+ if(playerHP<=0) respawnPlayer();
+}
+function respawnPlayer(){
+ playerHP=100; playerEnergy=100; playerArrows=10;
+ document.getElementById('hw-vida').innerText=100;
+ document.getElementById('hw-energia').innerText=100;
+ document.getElementById('hud-flechas').innerText=10;
+ document.getElementById('hw-vida-fill').style.width='100%';
+ document.getElementById('hw-energia-fill').style.width='100%';
+ const back=Math.max(1,currentPhase-1);
+ player.mesh.position.set(0,0,PHASE_CONFIG[back].z+8);
+ showToast('Voltaste ao caminho anterior.');
+}
+function checkCurrentProximity(){ if(activeInteractiveObject) openKwatiaModal(); }
+
+function openKwatiaModal(){
+ const d=KWATIA_CONTENT[activeInteractiveObject];
+ document.getElementById('kwatia-title').innerText=d.name;
+ document.getElementById('kwatia-meaning').innerText=`${d.meaning} — pág. ${d.page}`;
+ document.getElementById('kwatia-illustration').innerText=d.icon;
+ document.getElementById('kwatia-variants').innerText=d.variants;
+ openModal('read-modal');
+}
+function openQuestionModal(){
+ closeModal('read-modal');
+ const q=QUIZ[activeInteractiveObject];
+ document.getElementById('question-prompt').innerText=q.q;
+ const opts=document.getElementById('options-container');
+ opts.innerHTML='';
+ const shuffled=[...q.o].sort(()=>Math.random()-0.5);
+ shuffled.forEach(([text,correct])=>{
+  const btn=document.createElement('button');
+  btn.className='w-full py-3.5 px-4 bg-emerald-900/85 hover:bg-emerald-700 border border-emerald-500/40 text-emerald-100 text-xs rounded-xl font-semibold transition text-left flex justify-between items-center';
+  btn.innerHTML=`<span>${text}</span><i class="fas fa-chevron-right text-emerald-400/50"></i>`;
+  btn.onclick=()=>answerQuestion(correct);
+  opts.appendChild(btn);
+ });
+ openModal('question-modal');
+}
+function answerQuestion(correct){
+ if(!correct){ showToast('Resposta incorreta. Releia a Kwatiá.'); return; }
+ playerScore+=10;
+ document.getElementById('hud-pontos').innerText=playerScore;
+ if(!unlockedMedals.includes(currentPhase)) unlockedMedals.push(currentPhase);
+ if(currentPhase<21){
+  const done=currentPhase;
+  currentPhase++;
+  updatePhaseIndicator();
+  showToast(`Fase ${done} concluída!`);
+  player.mesh.position.z+=3;
+  saveProgress(false);
+ } else {
+  showToast(`PARABÉNS! Concluíste os 21 caminhos! ${playerScore} pts`);
+ }
+ closeModal('question-modal');
+}
+function saveProgress(explicit){
+ try{
+  localStorage.setItem(SAVE_KEY,JSON.stringify({
+   personagem:selectedCharacter||'konomi',fase:currentPhase,pontos:playerScore,
+   medalhas:unlockedMedals,z:player.mesh.position.z
+  }));
+  if(explicit) showToast('Progresso salvo.');
+ }catch(e){ if(explicit) showToast('Falha ao salvar.'); }
+}
+function loadProgress(){
+ try{ return JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); }catch(e){ return null; }
+}
+function continueGame(){
+ const data=loadProgress(); if(!data) return;
+ selectCharacter(data.personagem||'konomi');
+ currentPhase=data.fase||1;
+ playerScore=data.pontos||0;
+ unlockedMedals=data.medalhas||[];
+ player.mesh.position.z=data.z||PHASE_CONFIG[Math.max(1,currentPhase-1)].z+8;
+ document.getElementById('hud-pontos').innerText=playerScore;
+ updatePhaseIndicator();
+ showToast(`Continuando da fase ${currentPhase}.`);
+}
+function openMapModal(){
+ const list=document.getElementById('map-list');
+ list.innerHTML='';
+ PHASE_LIST.forEach(p=>{
+  let state='locked',label='Bloqueada';
+  if(p.n<currentPhase){state='done';label='Concluída';}
+  else if(p.n===currentPhase){state='current';label='Fase atual';}
+  const row=document.createElement('div');
+  row.className='flex items-center justify-between bg-emerald-900/30 border border-emerald-700/40 rounded-xl px-4 py-2.5';
+  row.innerHTML=`<div class="flex items-center gap-3"><span class="text-2xl">${p.icon}</span><div><p class="font-game text-xs text-amber-200">${p.title}</p><p class="text-[10px] text-emerald-300/70">${KWATIA_CONTENT[p.n].meaning} — pág. ${KWATIA_CONTENT[p.n].page}</p></div></div><span class="phase-pill ${state}">${label}</span>`;
+  list.appendChild(row);
+ });
+ openModal('map-modal');
+}
+function openMedalsModal(){
+ const list=document.getElementById('medals-list');
+ list.innerHTML='';
+ if(!unlockedMedals.length){
+  list.innerHTML='<p class="text-xs text-emerald-400/70">Nenhuma medalha ainda.</p>';
+ } else {
+  unlockedMedals.forEach(n=>{
+   const c=KWATIA_CONTENT[n];
+   const row=document.createElement('div');
+   row.className='flex items-center gap-3 bg-amber-900/30 border border-amber-600/40 rounded-xl px-4 py-2.5';
+   row.innerHTML=`<span class="text-2xl">${c.icon}</span><div><p class="font-game text-xs text-amber-200">${c.name}</p><p class="text-[10px] text-amber-300/70">${c.meaning} — pág. ${c.page}</p></div>`;
+   list.appendChild(row);
+  });
+ }
+ openModal('medals-modal');
+}
+function openModal(id){ document.getElementById(id).classList.add('flex'); document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id){ document.getElementById(id).classList.remove('flex'); document.getElementById(id).classList.add('hidden'); }
+
+const clock=new THREE.Clock();
+
+function animate(){
+ requestAnimationFrame(animate);
+ if(!gameStarted){ renderer.render(scene,camera); return; }
+
+ const delta=Math.min(clock.getDelta(),0.05);
+ const time=clock.getElapsedTime();
+ invulnTimer=Math.max(0,invulnTimer-delta);
+ arrowCooldown=Math.max(0,arrowCooldown-delta);
+
+ if(playerArrows<10 && playerEnergy>20){
+  rechargeTimer+=delta;
+  if(rechargeTimer>=2){
+   playerArrows=Math.min(10,playerArrows+1);
+   document.getElementById('hud-flechas').innerText=playerArrows;
+   rechargeTimer=0;
+  }
+ } else rechargeTimer=0;
+
+ const speed=9*delta;
+ let moveX=0,moveZ=0;
+ if(keys['w']||keys['arrowup']) moveZ-=1;
+ if(keys['s']||keys['arrowdown']) moveZ+=1;
+ if(keys['a']||keys['arrowleft']) moveX-=1;
+ if(keys['d']||keys['arrowright']) moveX+=1;
+ if(touchDir.x!==0||touchDir.z!==0){ moveX=touchDir.x; moveZ=touchDir.z; }
+ const moving=(moveX!==0||moveZ!==0);
+
+ if(moving){
+  const angle=Math.atan2(moveX,moveZ)+cameraAngleYaw;
+  player.mesh.rotation.y=angle;
+  let nx=player.mesh.position.x+Math.sin(angle)*speed;
+  let nz=player.mesh.position.z+Math.cos(angle)*speed;
+  const limite=PHASE_CONFIG[currentPhase].limite;
+  if(nz<limite) nz=limite;
+  player.mesh.position.x=Math.max(-18,Math.min(18,nx));
+  player.mesh.position.z=Math.max(-345,Math.min(48,nz));
+  const w=time*11;
+  player.leftLegPivot.rotation.x=Math.sin(w)*0.65;
+  player.rightLegPivot.rotation.x=-Math.sin(w)*0.65;
+  player.leftArmPivot.rotation.x=-Math.sin(w)*0.6;
+  player.rightArmPivot.rotation.x=Math.sin(w)*0.6;
+  player.torso.position.y=1.0+Math.abs(Math.sin(w*2))*0.06;
+ } else {
+  player.leftLegPivot.rotation.x=0;
+  player.rightLegPivot.rotation.x=0;
+  player.leftArmPivot.rotation.x=Math.sin(time*2)*0.05;
+  player.rightArmPivot.rotation.x=-Math.sin(time*2)*0.05;
+  player.torso.position.y=1.0+Math.sin(time*2)*0.02;
+ }
+
+ if(isJumping){
+  player.mesh.position.y+=playerVelocityY*delta;
+  playerVelocityY+=gravity*delta;
+  if(player.mesh.position.y<=0){ player.mesh.position.y=0; playerVelocityY=0; isJumping=false; }
+ }
+
+ for(const e of enemies){
+  if(!e.alive) continue;
+  const dx=player.mesh.position.x-e.mesh.position.x;
+  const dz=player.mesh.position.z-e.mesh.position.z;
+  const dist=Math.hypot(dx,dz);
+  e.cooldown=Math.max(0,e.cooldown-delta);
+  if(dist<14){
+   const len=dist||1;
+   e.mesh.position.x+=(dx/len)*e.cfg.speed*delta;
+   e.mesh.position.z+=(dz/len)*e.cfg.speed*delta;
+   if(dist<1.6 && e.cooldown===0){ damagePlayer(e.cfg.damage); e.cooldown=1.2; }
+  } else {
+   e.phaseAngle+=delta*0.6;
+   e.mesh.position.x=e.home.x+Math.cos(e.phaseAngle)*3;
+   e.mesh.position.z=e.home.z+Math.sin(e.phaseAngle)*3;
+  }
+  if(e.cfg.climb) e.mesh.position.y=1.5+Math.sin(time*2+e.phaseAngle)*0.4;
+  e.mesh.lookAt(player.mesh.position.x,e.mesh.position.y,player.mesh.position.z);
+ }
+
+ for(let i=arrows.length-1;i>=0;i--){
+  const a=arrows[i];
+  a.v.y+=a.gravity*delta;
+  a.mesh.position.addScaledVector(a.v,delta);
+  a.mesh.lookAt(a.mesh.position.x-a.v.x,a.mesh.position.y-a.v.y,a.mesh.position.z-a.v.z);
+  a.life-=delta;
+  let hit=false;
+  for(const e of enemies){
+   if(!e.alive) continue;
+   if(a.mesh.position.distanceTo(e.mesh.position)<1.5){
+    e.hp-=a.damage;
+    if(e.hp<=0){
+     e.alive=false; scene.remove(e.mesh);
+     playerScore+=5;
+     document.getElementById('hud-pontos').innerText=playerScore;
+    }
+    hit=true; break;
+   }
+  }
+  if(hit||a.life<=0||a.mesh.position.y<0){ scene.remove(a.mesh); arrows.splice(i,1); }
+ }
+
+ const cp=player.mesh.position;
+ camera.position.x=cp.x+Math.sin(cameraAngleYaw)*cameraDistance*Math.cos(cameraAnglePitch);
+ camera.position.y=cp.y+Math.sin(cameraAnglePitch)*cameraDistance;
+ camera.position.z=cp.z+Math.cos(cameraAngleYaw)*cameraDistance*Math.cos(cameraAnglePitch);
+ camera.lookAt(cp.x,cp.y+1.2,cp.z);
+
+ const needle=document.getElementById('compass-needle');
+ if(needle) needle.style.transform=`rotate(${cameraAngleYaw*180/Math.PI}deg)`;
+
+ document.getElementById('crosshair').classList.toggle('active',aiming);
+
+ const lm=landmarks[currentPhase];
+ const lmDist=cp.distanceTo(lm.position);
+ const btn=document.getElementById('btn-interact');
+ const lbl=document.getElementById('interact-label');
+ if(lmDist<5.5){
+  activeInteractiveObject=currentPhase;
+  btn.classList.remove('hidden');
+  lbl.innerText=`Ler Kwatiá (${KWATIA_CONTENT[currentPhase].name})`;
+ } else {
+  activeInteractiveObject=null;
+  btn.classList.add('hidden');
+ }
+
+ renderer.render(scene,camera);
+}
+
+if(loadProgress()) document.getElementById('continue-row').classList.remove('hidden');
+window.addEventListener('resize',()=>{
+ camera.aspect=window.innerWidth/window.innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(window.innerWidth,window.innerHeight);
+});
+animate();
+</script>
 </body>
 </html>

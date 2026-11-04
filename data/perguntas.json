@@ -1,0 +1,17 @@
+{
+  "versao": 1,
+  "fonte": "Estrutura pronta. Conteúdo linguístico aguardando o dicionário Nhandewa do desenvolvedor.",
+  "regras": {
+    "minimoPorFase": 5,
+    "embaralharAlternativas": true,
+    "proibidoSemResposta": true,
+    "proibidoSemValidacao": true
+  },
+  "perguntas": [
+    { "id": "f01-q01", "fase": 1, "palavra": "AWATI", "tipo": "ouvir-imagem",      "pergunta": null, "audio": null, "imagem": "assets/imgs/awati.png", "alternativas": [], "resposta": null, "explicacao": null, "validacao": "pendente" },
+    { "id": "f01-q02", "fase": 1, "palavra": "AWATI", "tipo": "imagem-palavra",    "pergunta": null, "audio": null, "imagem": "assets/imgs/awati.png", "alternativas": [], "resposta": null, "explicacao": null, "validacao": "pendente" },
+    { "id": "f01-q03", "fase": 1, "palavra": "AWATI", "tipo": "completar-palavra", "pergunta": null, "audio": null, "imagem": null,                    "alternativas": [], "resposta": null, "explicacao": null, "validacao": "pendente" },
+    { "id": "f01-q04", "fase": 1, "palavra": "AWATI", "tipo": "reconhecer-som",    "pergunta": null, "audio": null, "imagem": null,                    "alternativas": [], "resposta": null, "explicacao": null, "validacao": "pendente" },
+    { "id": "f01-q05", "fase": 1, "palavra": "AWATI", "tipo": "charada",           "pergunta": null, "audio": null, "imagem": null,                    "alternativas": [], "resposta": null, "explicacao": null, "validacao": "pendente" }
+  ]
+}

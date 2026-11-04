@@ -9,6 +9,8 @@ import { MobileControls } from '../ui/MobileControls.js';
 import { ThirdPersonCam } from '../camera/ThirdPersonCam.js';
 import { Player } from '../characters/Player.js';
 import { World } from '../world/World.js';
+import { Bow } from '../combat/Bow.js';
+import { Animals } from '../ai/Animals.js';
 
 export const STATES = { MENU: 'MENU', JOGANDO: 'JOGANDO', PERGUNTA: 'PERGUNTA', BOSS: 'BOSS', VITORIA: 'VITORIA' };
 
@@ -26,6 +28,8 @@ export class Game {
     this.world = null;
     this.player = null;
     this.cam = null;
+    this.bow = null;
+    this.animals = null;
     this.menuCam = null;
     this.menuBackdrop = null;
     this.fasesData = null;
@@ -54,13 +58,11 @@ export class Game {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
     this._buildLights();
-    this._setLoading(40, 'Preparando a câmera…');
 
     this.menuCam = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 500);
     this.menuCam.position.set(0, 14, 22);
     this.menuCam.lookAt(0, 3, 0);
 
-    this._setLoading(60, 'Reservando o mundo…');
     this._buildMenuBackdrop();
 
     this.menu.onStart = (charKey) => this.startGame(charKey);
@@ -127,6 +129,9 @@ export class Game {
     this.player = new Player(this.scene, this.world, charKey, this.audio);
     this.cam = new ThirdPersonCam(this.scene, this.world);
     this.cam.setTarget(this.player.object);
+    this.bow = new Bow(this.scene, this.world, this.player, this.audio);
+    this.animals = new Animals(this.scene, this.world);
+    this.animals.spawnFase1();
 
     this.menu.hide();
     this.hud.show('Fase 01 — AWATI   |   Objetivo: atravessar o milharal e encontrar o Guardião.');
@@ -144,6 +149,8 @@ export class Game {
   }
 
   disposeWorld() {
+    if (this.bow) { this.bow.dispose(); this.bow = null; }
+    this.animals = null;
     if (this.world?.group) this.scene.remove(this.world.group);
     if (this.player?.object) this.scene.remove(this.player.object);
     this.world = null;
@@ -165,6 +172,8 @@ export class Game {
     const dt = Math.min(this.clock.getDelta(), 0.05);
     if (this.state === STATES.JOGANDO && this.player && this.cam) {
       this.player.update(dt, this.input);
+      if (this.bow) this.bow.update(dt, this.input);
+      if (this.animals) this.animals.update(dt, this.player);
       this.cam.update(dt, this.input);
       this.hud.update(this.player);
     }

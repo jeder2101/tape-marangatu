@@ -1,0 +1,26 @@
+{
+  "versao": 1,
+  "medalhas": [
+    { "id": "medalha-awati",      "fase": 1,  "titulo": "Guardião do Milharal",      "palavra": "AWATI" },
+    { "id": "medalha-djagwarete", "fase": 2,  "titulo": "Onça Guardiã",              "palavra": "DJAGWARETE" },
+    { "id": "medalha-eitsy",      "fase": 3,  "titulo": "Rainha das Abelhas",        "palavra": "EITSY" },
+    { "id": "medalha-gwara",      "fase": 4,  "titulo": "Guardião da Trilha",        "palavra": "GWARÁ" },
+    { "id": "medalha-mata",       "fase": 5,  "titulo": "Colosso das Pedras",        "palavra": null },
+    { "id": "medalha-karu",       "fase": 6,  "titulo": "Guardião dos Alimentos",    "palavra": "KARU" },
+    { "id": "medalha-mita",       "fase": 7,  "titulo": "Guardião das Brincadeiras", "palavra": "MITÃ" },
+    { "id": "medalha-mborai",     "fase": 8,  "titulo": "Guardião dos Sons",         "palavra": "MBORAI" },
+    { "id": "medalha-nambu",      "fase": 9,  "titulo": "Guardião das Aves",         "palavra": "NAMBU" },
+    { "id": "medalha-nderu",      "fase": 10, "titulo": "Guardião Ancestral",        "palavra": "NDERU" },
+    { "id": "medalha-nhandu",     "fase": 11, "titulo": "Aranha Gigante",            "palavra": "NHANDU" },
+    { "id": "medalha-floresta",   "fase": 12, "titulo": "Guardião da Mata",          "palavra": null },
+    { "id": "medalha-pira",       "fase": 13, "titulo": "Guardião do Rio",           "palavra": "PIRA" },
+    { "id": "medalha-rrekoa",     "fase": 14, "titulo": "Guardião dos Caminhos",     "palavra": "RREKOA" },
+    { "id": "medalha-tay",        "fase": 15, "titulo": "Rainha das Formigas",       "palavra": "TAY" },
+    { "id": "medalha-tsugwai",    "fase": 16, "titulo": "Guardião da Floresta",      "palavra": "TSUGWAI" },
+    { "id": "medalha-txiwi",      "fase": 17, "titulo": "Guardião dos Caminhos",     "palavra": "TXIWI" },
+    { "id": "medalha-uru",        "fase": 18, "titulo": "Guardião das Aves",         "palavra": "URU" },
+    { "id": "medalha-wera",       "fase": 19, "titulo": "Guardião dos Raios",        "palavra": "WERA" },
+    { "id": "medalha-ywyra",      "fase": 20, "titulo": "Árvore Ancestral",          "palavra": "YWYRA" },
+    { "id": "medalha-agua-final", "fase": 21, "titulo": "Guardião das Águas",        "palavra": "Y'Y", "final": true }
+  ]
+}

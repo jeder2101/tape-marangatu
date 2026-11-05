@@ -1,0 +1,427 @@
+[
+  {
+    "id": 1,
+    "letra": "A",
+    "titulo": "A Aldeia ao Amanhecer",
+    "palavras": [
+      { "termo": "Apy", "significado": "aqui" },
+      { "termo": "Ary porã", "significado": "bom dia, bom ano" },
+      { "termo": "Angudjá", "significado": "rato" },
+      { "termo": "Awati", "significado": "milho" },
+      { "termo": "Ajaka", "significado": "cesto" }
+    ],
+    "chefe": { "nome": "Ancião Tuwitxá", "emoji": "👴🏽", "hp": 3 },
+    "cenario": { "ceu": "#bfe3ff", "nuvens": "#cfe8f6", "base": "#4a8a30", "trilha": "#8a6a48", "densidade": 0.9, "agua": false, "colinas": 0.4 },
+    "pergunta": {
+      "texto": "Na lição de saudações, como se diz “bom dia” em Nhandewa?",
+      "opcoes": ["Apy", "Ary porã", "Ko'ẽ porã", "Pyntũ porã"],
+      "correta": 1,
+      "explicacao": "Ary porã é a saudação da manhã, usada junto de Nhandé ko'ẽ djiwy."
+    }
+  },
+  {
+    "id": 2,
+    "letra": "DJ",
+    "titulo": "DJ — Na Mata Fechada",
+    "palavras": [
+      { "termo": "Djagwarete", "significado": "onça" },
+      { "termo": "Djety", "significado": "batata-doce" },
+      { "termo": "Djuru", "significado": "boca" },
+      { "termo": "Djakaré", "significado": "jacaré" },
+      { "termo": "Djatsy", "significado": "mês, lua" }
+    ],
+    "chefe": { "nome": "Djagwarete, a onça", "emoji": "🐆", "hp": 3 },
+    "cenario": { "ceu": "#8fb8c9", "nuvens": "#b6cfd9", "base": "#365e24", "trilha": "#6b5236", "densidade": 1.5, "agua": false, "colinas": 0.9 },
+    "pergunta": {
+      "texto": "Segundo a Kwatiá, onde a Djagwarete vive e por que fica perto da água?",
+      "opcoes": [
+        "No deserto seco, longe de tudo",
+        "Na mata perto de rios, onde caça e nada muito bem",
+        "Dentro de cavernas sem vegetação",
+        "Nas cidades grandes"
+      ],
+      "correta": 1,
+      "explicacao": "A onça-pintada habita a mata e as margens dos rios, onde encontra abrigo e alimento."
+    }
+  },
+  {
+    "id": 3,
+    "letra": "E",
+    "titulo": "E — No Campo Aberto",
+    "palavras": [
+      { "termo": "Eí", "significado": "mel de abelhas" },
+      { "termo": "Eĩwa", "significado": "aquele, aquela" },
+      { "termo": "Eté", "significado": "verdadeiro, muito" },
+      { "termo": "Etxakwaá", "significado": "conhecer" },
+      { "termo": "Ekaru", "significado": "comer" }
+    ],
+    "chefe": { "nome": "Ka'i, o macaco", "emoji": "🐒", "hp": 3 },
+    "cenario": { "ceu": "#9fd3e8", "nuvens": "#ffffff", "base": "#6ea93c", "trilha": "#a5804e", "densidade": 0.5, "agua": false, "colinas": 1.3 },
+    "pergunta": {
+      "texto": "No vocabulário Nhanderembi'uwa, o que significa Eí?",
+      "opcoes": ["Mel de abelhas", "Milho", "Peixe", "Sal"],
+      "correta": 0,
+      "explicacao": "Eí é o mel de abelhas, alimento tradicional das receitas do caderno."
+    }
+  },
+  {
+    "id": 4,
+    "letra": "GW",
+    "titulo": "GW — No Rio Largo",
+    "palavras": [
+      { "termo": "Gwyrá", "significado": "pássaro, gavião" },
+      { "termo": "Gwatsu", "significado": "veado, grande" },
+      { "termo": "Gwyrapá", "significado": "arco" },
+      { "termo": "Gwatá", "significado": "andar" },
+      { "termo": "Gwypy", "significado": "embaixo" }
+    ],
+    "chefe": { "nome": "Gwyrá, o gavião", "emoji": "🦅", "hp": 3 },
+    "cenario": { "ceu": "#a8d8ee", "nuvens": "#f4fbff", "base": "#57913a", "trilha": "#8b7a53", "densidade": 0.7, "agua": true, "colinas": 0.6 },
+    "pergunta": {
+      "texto": "O que a palavra Gwyrá designa no glossário de animais?",
+      "opcoes": ["Veado", "Pássaro, gavião", "Cachorro", "Onça"],
+      "correta": 1,
+      "explicacao": "Gwyrá é pássaro e, no uso mais comum, o gavião que sobrevoa a mata."
+    }
+  },
+  {
+    "id": 5,
+    "letra": "I",
+    "titulo": "I — A Lagoa das Águas Claras",
+    "palavras": [
+      { "termo": "Irara", "significado": "papa-mel" },
+      { "termo": "Iporã", "significado": "é bonito(a)" },
+      { "termo": "Itá", "significado": "pedra" },
+      { "termo": "Ikyry", "significado": "verde" },
+      { "termo": "Idju", "significado": "azul" }
+    ],
+    "chefe": { "nome": "Kururu, o sapo", "emoji": "🐸", "hp": 3 },
+    "cenario": { "ceu": "#b7e2f2", "nuvens": "#eaf7ff", "base": "#4d8b53", "trilha": "#7f6b46", "densidade": 0.8, "agua": true, "colinas": 0.3 },
+    "pergunta": {
+      "texto": "Como se diz “é bonito” (predicação) em Nhandewa, conforme a lição de adjetivos?",
+      "opcoes": ["porã", "iporã", "puku", "itudjá"],
+      "correta": 1,
+      "explicacao": "Quando se afirma uma qualidade, o adjetivo recebe a marca i-: Ka'agwy iporã — o mato é bonito."
+    }
+  },
+  {
+    "id": 6,
+    "letra": "K",
+    "titulo": "K — A Roça e o Milharal",
+    "palavras": [
+      { "termo": "Ka'i", "significado": "macaco" },
+      { "termo": "Kumandá", "significado": "feijão" },
+      { "termo": "Karó", "significado": "copo, caneca" },
+      { "termo": "Katxuru", "significado": "cachorro" },
+      { "termo": "Kwaray", "significado": "sol" }
+    ],
+    "chefe": { "nome": "Ka'i de novo, o macaco", "emoji": "🐒", "hp": 3 },
+    "cenario": { "ceu": "#ffe9b8", "nuvens": "#fff8e1", "base": "#7ea63c", "trilha": "#9a7445", "densidade": 0.4, "agua": false, "colinas": 0.5 },
+    "pergunta": {
+      "texto": "No texto Awatity, quem tentava comer o milho da roça?",
+      "opcoes": ["As formigas", "O macaco (ka'i) em bando", "O cachorro da aldeia", "Os pássaros da mata"],
+      "correta": 1,
+      "explicacao": "O texto narra os ka'i retá, o bando de macacos, atacando o milharal."
+    }
+  },
+  {
+    "id": 7,
+    "letra": "KW",
+    "titulo": "KW — Na Casa de Reza",
+    "palavras": [
+      { "termo": "Kwaray", "significado": "sol" },
+      { "termo": "Kwatiá", "significado": "escrita, texto" },
+      { "termo": "Kutxá", "significado": "colher" },
+      { "termo": "Kwá", "significado": "buraco, lugar" },
+      { "termo": "Kanã", "significado": "cana-de-açúcar" }
+    ],
+    "chefe": { "nome": "Paty, o espírito do Kwatiá", "emoji": "📜", "hp": 3 },
+    "cenario": { "ceu": "#f4d9a8", "nuvens": "#fbeed3", "base": "#5f9138", "trilha": "#87704a", "densidade": 0.6, "agua": false, "colinas": 0.5 },
+    "pergunta": {
+      "texto": "No texto sobre os pontos cardeais, de que lado nasce o sol em Nhandewa?",
+      "opcoes": ["Kwaray ontsẽa — a nascente do sol", "Kwaray okeá — o poente do sol", "Nhandé Kupé-Regwá", "Nhandé Yké-Regwá"],
+      "correta": 0,
+      "explicacao": "Kwaray ontsẽa é onde o sol aparece; do outro lado fica Kwaray okeá, o poente."
+    }
+  },
+  {
+    "id": 8,
+    "letra": "M",
+    "titulo": "M — A Trilha dos Pequenos Animais",
+    "palavras": [
+      { "termo": "Mandi'o", "significado": "mandioca" },
+      { "termo": "Mboí", "significado": "cobra" },
+      { "termo": "Mbutu", "significado": "mutuca" },
+      { "termo": "Mitã", "significado": "criança" },
+      { "termo": "Manduwi", "significado": "amendoim" }
+    ],
+    "chefe": { "nome": "Mboí, a serpente", "emoji": "🐍", "hp": 3 },
+    "cenario": { "ceu": "#a4cf8f", "nuvens": "#dbf0d0", "base": "#3d6b2e", "trilha": "#6f5534", "densidade": 1.2, "agua": false, "colinas": 0.7 },
+    "pergunta": {
+      "texto": "Qual desses é alimento feito da mandioca, conforme o caderno?",
+      "opcoes": ["Mandi'o-ku'i — farinha de mandioca", "Awati", "Eí", "Pakowá"],
+      "correta": 0,
+      "explicacao": "Mandi'o-ku'i é a farinha de mandioca, base de várias receitas."
+    }
+  },
+  {
+    "id": 9,
+    "letra": "MB",
+    "titulo": "MB — O Atalho da Capoeira",
+    "palavras": [
+      { "termo": "Mbari'i", "significado": "pouco" },
+      { "termo": "Mbo'y", "significado": "colar" },
+      { "termo": "Mbaraká", "significado": "maraca" },
+      { "termo": "Mbaipy", "significado": "comida de milho" },
+      { "termo": "Mbengwé", "significado": "devagar" }
+    ],
+    "chefe": { "nome": "Mbari'i, o espírito pequeno", "emoji": "🍃", "hp": 3 },
+    "cenario": { "ceu": "#c9e2b0", "nuvens": "#eaf6dd", "base": "#5a8336", "trilha": "#7f6544", "densidade": 1.0, "agua": false, "colinas": 0.6 },
+    "pergunta": {
+      "texto": "Na lista de advérbios, o que significa mbari'i?",
+      "opcoes": ["Muito", "Pouco", "Rápido", "Longe"],
+      "correta": 1,
+      "explicacao": "Mbari'i significa pouco; eté é muito."
+    }
+  },
+  {
+    "id": 10,
+    "letra": "N",
+    "titulo": "N — A Sombra das Árvores Antigas",
+    "palavras": [
+      { "termo": "Nhandu", "significado": "aranha" },
+      { "termo": "Nhandé", "significado": "nós (inclusivo)" },
+      { "termo": "Nambi", "significado": "orelha" },
+      { "termo": "Nhandy", "significado": "óleo" },
+      { "termo": "Nhamandu", "significado": "sol" }
+    ],
+    "chefe": { "nome": "Nhandu, a aranha gigante", "emoji": "🕷️", "hp": 3 },
+    "cenario": { "ceu": "#8fbc9a", "nuvens": "#c9dccb", "base": "#2f5a2a", "trilha": "#5f4a30", "densidade": 1.6, "agua": false, "colinas": 0.7 },
+    "pergunta": {
+      "texto": "Como se diz “nós”, incluindo quem ouve, em Nhandewa?",
+      "opcoes": ["Oré", "Nhandé", "Peẽ", "Txeé"],
+      "correta": 1,
+      "explicacao": "Nhandé é o nós inclusivo; oré é o nós exclusivo."
+    }
+  },
+  {
+    "id": 11,
+    "letra": "ND",
+    "titulo": "ND — A Vargem Alagada",
+    "palavras": [
+      { "termo": "Nderowá", "significado": "teu rosto" },
+      { "termo": "Ndowé", "significado": "chegando, vindo" },
+      { "termo": "Nderoy", "significado": "estás com frio" },
+      { "termo": "Ñandu", "significado": "aranha" },
+      { "termo": "Ndeé", "significado": "tu, você" }
+    ],
+    "chefe": { "nome": "Dju'i, a perereca", "emoji": "🐸", "hp": 3 },
+    "cenario": { "ceu": "#a7d3d8", "nuvens": "#dff1f2", "base": "#487a4a", "trilha": "#6d6242", "densidade": 0.8, "agua": true, "colinas": 0.2 },
+    "pergunta": {
+      "texto": "Para falar “estou com frio”, qual forma está certa na 2ª conjugação?",
+      "opcoes": ["Txeé agwatá", "Txeé txero'y", "Txeé aikwaá", "Txeé akaru"],
+      "correta": 1,
+      "explicacao": "Verbos descritivos usam as marcas txe-, nde-: txero'y, ndero'y."
+    }
+  },
+  {
+    "id": 12,
+    "letra": "NG",
+    "titulo": "NG — O Morro do Vigia",
+    "palavras": [
+      { "termo": "Ngwé", "significado": "velho, usado" },
+      { "termo": "Ngu'ã", "significado": "lugar, espaço" },
+      { "termo": "Ngirirĩ", "significado": "silêncio" },
+      { "termo": "Ngwatsu", "significado": "grande" },
+      { "termo": "Ngwerá", "significado": "chegar do outro lado" }
+    ],
+    "chefe": { "nome": "Tuwitxá, o vigia da colina", "emoji": "🪶", "hp": 3 },
+    "cenario": { "ceu": "#c7d7ea", "nuvens": "#e9eefa", "base": "#5f7f45", "trilha": "#8a7452", "densidade": 0.5, "agua": false, "colinas": 1.8 },
+    "pergunta": {
+      "texto": "Segundo a regra ortográfica, o som de “ng” diante de i, e ou é se escreve como?",
+      "opcoes": ["Somente n", "n + guia", "com ng acompanhado de u, como em monguetá", "com g simples"],
+      "correta": 2,
+      "explicacao": "A convenção ortográfica define ng diante de i, e, é acompanhado de u: monguetá."
+    }
+  },
+  {
+    "id": 13,
+    "letra": "NH",
+    "titulo": "NH — A Aldeia das Crianças",
+    "palavras": [
+      { "termo": "Nhandé", "significado": "nós" },
+      { "termo": "Nhanderu", "significado": "Nosso Pai, Deus" },
+      { "termo": "Nhandereko", "significado": "nosso modo de viver" },
+      { "termo": "Nhembo'e", "significado": "aprender, ensinar" },
+      { "termo": "Nhe'ẽ", "significado": "palavra, língua, espírito" }
+    ],
+    "chefe": { "nome": "Nhamandu Mirim, a criança-guia", "emoji": "🧒🏽", "hp": 3 },
+    "cenario": { "ceu": "#ffe6c2", "nuvens": "#fff6e6", "base": "#6f9c3f", "trilha": "#94764b", "densidade": 0.6, "agua": false, "colinas": 0.6 },
+    "pergunta": {
+      "texto": "O que significa Nhandereko?",
+      "opcoes": ["Nossa casa", "Nosso modo de viver", "Nossa roça", "Nossa música"],
+      "correta": 1,
+      "explicacao": "Nhandereko é o nosso modo de vida, o jeito Nhandewa de ser e estar no mundo."
+    }
+  },
+  {
+    "id": 14,
+    "letra": "O",
+    "titulo": "O — A Fogueira do Entardecer",
+    "palavras": [
+      { "termo": "Oky", "significado": "chuva (chover)" },
+      { "termo": "Omanõ", "significado": "morrer" },
+      { "termo": "Oká", "significado": "fora" },
+      { "termo": "Owy", "significado": "azul" },
+      { "termo": "Oipa", "significado": "terminar" }
+    ],
+    "chefe": { "nome": "Tatá, o fogo", "emoji": "🔥", "hp": 3 },
+    "cenario": { "ceu": "#e8b57a", "nuvens": "#f7dcc0", "base": "#5b7c36", "trilha": "#7b6040", "densidade": 0.7, "agua": false, "colinas": 0.8 },
+    "pergunta": {
+      "texto": "Pela regra de acentuação, qual palavra oral NÃO recebe acento na última sílaba?",
+      "opcoes": ["Nhandé", "Angudjá", "Tapiti", "Karumbé"],
+      "correta": 2,
+      "explicacao": "Palavras terminadas em i, y ou u não são acentuadas: tapiti, mboapy, tedju."
+    }
+  },
+  {
+    "id": 15,
+    "letra": "P",
+    "titulo": "P — A Casa de Farinha",
+    "palavras": [
+      { "termo": "Pakowá", "significado": "banana" },
+      { "termo": "Pirá", "significado": "peixe" },
+      { "termo": "Petyngwá", "significado": "cachimbo" },
+      { "termo": "Pyntã", "significado": "vermelho" },
+      { "termo": "Py", "significado": "pé; em, dentro de (posposição)" }
+    ],
+    "chefe": { "nome": "Pirá, o peixe grande", "emoji": "🐟", "hp": 3 },
+    "cenario": { "ceu": "#b6dbe9", "nuvens": "#e9f5fa", "base": "#4e8446", "trilha": "#8a6b46", "densidade": 0.8, "agua": true, "colinas": 0.4 },
+    "pergunta": {
+      "texto": "Qual posposição indica “em, dentro de”, como em tentã-py?",
+      "opcoes": ["-gwi", "-py", "-rupi", "-rewé"],
+      "correta": 1,
+      "explicacao": "-py marca lugar: tentã-py é “na cidade”."
+    }
+  },
+  {
+    "id": 16,
+    "letra": "R",
+    "titulo": "R — O Caminho de Pedra",
+    "palavras": [
+      { "termo": "Rokyá", "significado": "cabaça, chocalho" },
+      { "termo": "Rapé", "significado": "caminho, trilha" },
+      { "termo": "Rekó", "significado": "modo, costume" },
+      { "termo": "Riré", "significado": "depois" },
+      { "termo": "Ro'y", "significado": "frio" }
+    ],
+    "chefe": { "nome": "Wyrá, a madeira viva", "emoji": "🌳", "hp": 3 },
+    "cenario": { "ceu": "#c2cdd9", "nuvens": "#e5e9ef", "base": "#4b6b3e", "trilha": "#8f8672", "densidade": 1.1, "agua": false, "colinas": 1.0 },
+    "pergunta": {
+      "texto": "Na frase Tapé rupi, o que a posposição -rupi indica?",
+      "opcoes": ["Por, pelo caminho", "Embaixo", "Em cima", "Longe"],
+      "correta": 0,
+      "explicacao": "-rupi indica “por, através de”: tape-rupi é “pelo caminho”."
+    }
+  },
+  {
+    "id": 17,
+    "letra": "T",
+    "titulo": "T — A Aldeia dos Tatus",
+    "palavras": [
+      { "termo": "Tatá", "significado": "fogo" },
+      { "termo": "Tatu", "significado": "tatu" },
+      { "termo": "Tangwá", "significado": "formiga-tinguá" },
+      { "termo": "Tapiti", "significado": "lebre" },
+      { "termo": "Tuwitxá", "significado": "chefe" }
+    ],
+    "chefe": { "nome": "Tatu, o escavador", "emoji": "🦡", "hp": 3 },
+    "cenario": { "ceu": "#e3d2ae", "nuvens": "#f6ecd8", "base": "#6a7f3b", "trilha": "#8c7449", "densidade": 0.9, "agua": false, "colinas": 0.9 },
+    "pergunta": {
+      "texto": "Como é chamado o chefe da aldeia, conforme o vocabulário?",
+      "opcoes": ["Tuwitxá", "Mitã", "Kunumĩ", "Tuty"],
+      "correta": 0,
+      "explicacao": "Tuwitxá é o chefe; txeruwitxá é “meu chefe”."
+    }
+  },
+  {
+    "id": 18,
+    "letra": "TS",
+    "titulo": "TS — A Grande Corredeira",
+    "palavras": [
+      { "termo": "Tsugwai", "significado": "porco doméstico" },
+      { "termo": "Tso'o", "significado": "carne" },
+      { "termo": "Tsaá", "significado": "sal" },
+      { "termo": "Tsutsuarã", "significado": "suçuarana" },
+      { "termo": "Tsapi-tsapi", "significado": "vagalume" }
+    ],
+    "chefe": { "nome": "Tsugwai, o porco do mato", "emoji": "🐗", "hp": 3 },
+    "cenario": { "ceu": "#adcfe0", "nuvens": "#dceff6", "base": "#3f7b57", "trilha": "#7a6b4c", "densidade": 1.0, "agua": true, "colinas": 0.5 },
+    "pergunta": {
+      "texto": "Qual é o nome do porco doméstico no glossário de animais?",
+      "opcoes": ["Tsugwai", "Tajasu", "Tatu", "Tapiti"],
+      "correta": 0,
+      "explicacao": "Tsugwai é o porco doméstico; tadjatsu é a queixada."
+    }
+  },
+  {
+    "id": 19,
+    "letra": "TX",
+    "titulo": "TX — O Mato Fechado",
+    "palavras": [
+      { "termo": "Txeé", "significado": "eu" },
+      { "termo": "Txetsy", "significado": "minha mãe" },
+      { "termo": "Txeru", "significado": "meu pai" },
+      { "termo": "Txondaro", "significado": "soldado, guerreiro" },
+      { "termo": "Txiwi", "significado": "gato" }
+    ],
+    "chefe": { "nome": "Txiwi, o gato do mato", "emoji": "🐈", "hp": 3 },
+    "cenario": { "ceu": "#9bc6a6", "nuvens": "#d5eadd", "base": "#2e5a34", "trilha": "#5f4b34", "densidade": 1.7, "agua": false, "colinas": 0.8 },
+    "pergunta": {
+      "texto": "Qual é a diferença de sentido entre txetsy e txeru?",
+      "opcoes": ["Ambos significam irmão", "Txetsy é minha mãe; txeru é meu pai", "Txetsy é meu avô; txeru é meu tio", "São sinônimos"],
+      "correta": 1,
+      "explicacao": "As marcas txe- de posse com o parentesco definem mãe e pai."
+    }
+  },
+  {
+    "id": 20,
+    "letra": "U",
+    "titulo": "U — A Cachoeira Alta",
+    "palavras": [
+      { "termo": "Urukure'a", "significado": "coruja" },
+      { "termo": "U'y", "significado": "flecha" },
+      { "termo": "Uũ", "significado": "negro, preto" },
+      { "termo": "Uru", "significado": "cesto, uru" },
+      { "termo": "Upé", "significado": "ali, lá" }
+    ],
+    "chefe": { "nome": "Urukure'a, a coruja", "emoji": "🦉", "hp": 3 },
+    "cenario": { "ceu": "#7f9fc4", "nuvens": "#c1d6e8", "base": "#356047", "trilha": "#6b5a44", "densidade": 1.1, "agua": true, "colinas": 1.2 },
+    "pergunta": {
+      "texto": "Na canção Urukure'a rendá, quem canta uu…uu à noite?",
+      "opcoes": ["O sapo kururu", "A coruja (urukure'a)", "O gavião", "O veado"],
+      "correta": 1,
+      "explicacao": "A canção repete o canto da coruja, uu…uu…uu, moradora das alturas."
+    }
+  },
+  {
+    "id": 21,
+    "letra": "Y'Y",
+    "titulo": "Y'Y — A Grande Saga da Água",
+    "palavras": [
+      { "termo": "Yy", "significado": "água" },
+      { "termo": "Yy akã", "significado": "cabeceira do rio, cachoeira" },
+      { "termo": "Paraná", "significado": "rio" },
+      { "termo": "Yy kwá", "significado": "lagoa, lago" },
+      { "termo": "Ywyrá", "significado": "árvore" }
+    ],
+    "chefe": { "nome": "Yy, a água-mãe", "emoji": "💧", "hp": 4 },
+    "cenario": { "ceu": "#5aa8c8", "nuvens": "#dcf2fa", "base": "#2c6e5e", "trilha": "#6f6550", "densidade": 0.6, "agua": true, "colinas": 0.4 },
+    "pergunta": {
+      "texto": "Na história do tatu e da onça, qual elemento venceu por ser o mais forte de todos?",
+      "opcoes": ["O fogo", "O vento", "A água (Yy)", "A árvore"],
+      "correta": 2,
+      "explicacao": "A água apaga o fogo e, na corrente da história, supera até o vento e a terra. No fim, o homem e Nhanderu completam o ciclo."
+    }
+  }
+]
